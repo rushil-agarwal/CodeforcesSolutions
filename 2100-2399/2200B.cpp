@@ -7,22 +7,29 @@ using namespace std;
 
 void solve(){
     int n; cin >> n;
-    vector<int> vec(n);
-    for(int i=0; i<n; i++) cin >> vec[i];
+    vector<ll> nums(n);
 
-    bool flag = false;
+    for(int i=0; i<n; i++)
+        cin >> nums[i];
 
-    for(int i=1; i<n; i++){
-        if(vec[i] < vec[i-1]){
-            flag = true;
-            break;
-        }
+    vector<ll> processed;
+    vector<int> ans(n);
+    for(int i=n-1; i>=0; i--){
+        auto it1 = lower_bound(processed.begin(), processed.end(), nums[i]);
+        auto it2 = upper_bound(processed.begin(), processed.end(), nums[i]);
+
+        int smaller = it1 - processed.begin();
+        int greater = processed.size() - (it2 - processed.begin());
+
+        ans[i] = max(smaller, greater);
+
+        processed.insert(it1, nums[i]);
     }
 
-    if(flag)
-        cout << "1\n";
-    else
-        cout << n << "\n";
+    for(auto it: ans)
+        cout << it << " ";
+
+    cout << '\n';
 }
 
 int main(){
